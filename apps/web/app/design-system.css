@@ -1,0 +1,252 @@
+/* LifeOS visual system: charcoal, source-aware colour, short useful rows.
+   Palette authority lives in globals.css; this file owns shared composition. */
+body { font-size: 15px; line-height: 1.55; }
+h1 { font-size: 30px; line-height: 1.25; letter-spacing: -.5px; }
+h2, h3 { font-size: 18px; line-height: 1.45; font-weight: 600; }
+.app-shell { grid-template-columns: 218px minmax(0, 1fr); }
+.sidebar { padding: 29px 18px 18px; background: var(--bg); }
+.sidebar-caption { margin: 11px 11px 30px; font-size: 12px; color: var(--muted); }
+.brand { font-size: 24px; }
+.brand-mark { background: var(--accent); color: #152039; border-radius: 11px; }
+.brand .accent { color: var(--text); }
+.main-nav a { min-height: 48px; border-color: transparent; border-radius: 11px; }
+.main-nav a[aria-current="page"] { border-color: transparent; position: relative; }
+.main-nav a[aria-current="page"]::before { content: ""; position: absolute; inset-inline-start: 0; top: 15px; bottom: 15px; width: 3px; border-radius: 3px; background: var(--accent); }
+.nav-count { background: var(--accent-soft); color: var(--accent); }
+.sidebar-section { margin-top: 24px; padding-top: 18px; }
+.sidebar-bottom { padding-top: 20px; }
+.topbar { min-height: 70px; padding-inline: 34px; }
+.main-content { padding: 25px 34px 0; max-width: 1480px; }
+.page-heading, .view-dashboard .page-heading { margin-bottom: 22px; }
+.page-heading > .button { margin-top: 0; }
+.page-heading h1, .view-dashboard .page-heading h1 { font-size: 30px; }
+.page-heading .muted { font-size: 13px; }
+.greeting { font-size: 13px; }
+.panel { border-radius: var(--radius); box-shadow: none; }
+.panel-heading { padding: 18px 20px 14px; }
+.panel-heading h2 { font-size: 18px; }
+.panel-footer { padding: 4px 20px; }
+.button { border-radius: 9px; min-height: 44px; font-size: 14px; }
+.button-primary { color: #111d35; }
+:root[data-theme="light"] .button-primary { color: #fff; }
+.button-secondary { background: var(--surface-raised); border-color: var(--border); }
+.button-small { min-height: 40px; font-size: 13px; }
+.field-help { font-size: 13px; line-height: 1.6; }
+.record-title { font-size: 15px; line-height: 1.5; }
+.record-meta { font-size: 12px; }
+.task-list { padding-inline: 20px; }
+.task-row { padding-block: 13px; gap: 12px; }
+.section-fold { border-radius: 12px; }
+.section-fold > summary { font-size: 15px; min-height: 52px; }
+.segmented, .academic-tabs { border-radius: 10px; }
+.mobile-settings-button { display: none; }
+
+/* A slim week strip, one actual upcoming event and quiet, honest counters. */
+.view-dashboard .day-dashboard { grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr); gap: 15px 22px; margin-bottom: 22px; }
+.view-dashboard .day-board { grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; padding: 10px 15px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--text); }
+.view-dashboard .day-board-heading { margin: 0; min-width: 135px; border-inline-end: 1px solid var(--border); padding-inline-end: 18px; }
+.view-dashboard .day-board-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+.view-dashboard .day-board-heading h2 { font-size: 15px; margin-top: 2px; }
+.view-dashboard .day-stamp { display: none; }
+.view-dashboard .day-ribbon { flex: 1; gap: 6px; }
+.view-dashboard .day-ribbon a { color: var(--muted); min-height: 45px; padding: 4px; gap: 1px; border-radius: 8px; }
+.view-dashboard .day-ribbon a:hover { background: var(--surface-hover); }
+.view-dashboard .day-ribbon a.is-today { color: var(--accent); background: var(--accent-soft); }
+.view-dashboard .day-ribbon strong { font-size: 17px; }
+.view-dashboard .day-ribbon span { font-size: 11px; }
+.view-dashboard .day-focus { grid-column: 2; grid-row: 2 / 4; background: #234a88; border: 0; border-radius: 14px; padding: 20px; color: #f2f5ff; }
+.view-dashboard .day-focus-label { color: #d3def4; font-size: 13px; }
+.view-dashboard .day-focus-event { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 15px 0; }
+.view-dashboard .day-focus-event > strong { font-size: 22px; line-height: 1.4; }
+.view-dashboard .day-focus-event > span { color: #d3def4; font-size: 13px; }
+.view-dashboard .day-focus-room { padding-top: 10px; width: 100%; border-top: 1px solid #ffffff25; }
+.view-dashboard .day-progress > span { color: #d3def4; font-size: 12px; }
+.view-dashboard .day-progress progress { height: 3px; margin-top: 8px; background: #ffffff20; }
+.view-dashboard .day-progress progress::-webkit-progress-bar { background: #ffffff20; }
+.view-dashboard .day-metrics { grid-column: 1; grid-row: 2; display: flex; gap: 0; border: 1px solid var(--border); background: var(--surface); border-radius: 12px; align-self: start; }
+.view-dashboard .day-metric { flex: 1; padding: 15px 10px; border: 0; background: none; border-radius: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; }
+.view-dashboard .day-metric + .day-metric { border-inline-start: 1px solid var(--border); }
+.view-dashboard .day-metric svg { display: none; }
+.view-dashboard .day-metric strong { font-size: 22px; grid-row: 1 / 3; align-self: center; }
+.view-dashboard .day-metric span { font-size: 12px; align-self: center; }
+.view-dashboard .day-dashboard:has(.day-focus-empty) { grid-template-columns: 1fr; }
+.view-dashboard .day-dashboard:has(.day-focus-empty) .day-metrics { grid-column: 1 / -1; }
+.view-dashboard .day-focus-empty { display: none; }
+.view-dashboard .day-dashboard:not(:has(.day-focus)) { grid-template-columns: 1fr; }
+.view-dashboard .day-dashboard:not(:has(.day-focus)) .day-metrics { grid-column: 1 / -1; }
+
+/* Work is the main column; context is alongside it rather than another feed. */
+.home-dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr); gap: 20px 22px; align-items: start; }
+.home-work, .home-updates, .home-mail { min-width: 0; }
+.home-work { grid-column: 1; grid-row: 1; }
+.home-updates { grid-column: 2; grid-row: 1 / 3; display: grid; gap: 14px; }
+.home-updates .day-focus { grid-area: auto; }
+.home-mail { grid-column: 1; grid-row: 2; }
+.home-work > .panel { margin-bottom: 16px; }
+.home-work .dashboard-columns { display: flex; flex-direction: column-reverse; align-items: stretch; gap: 16px; margin-block: 0; }
+.home-work > .panel, .home-work .dashboard-columns > .panel { padding: 0; }
+.home-work > .panel > .field-help { margin: 0; padding: 0 20px 10px; }
+.home-work .task-list { padding-inline: 20px; }
+.home-work .task-row { padding-block: 13px; }
+.home-work .compact-agenda { margin: 0; }
+.home-updates .personal-updates { margin: 0; padding: 17px; border-inline-start-width: 2px; }
+.home-updates .personal-updates-heading { margin-bottom: 12px; gap: 8px; }
+.home-updates .personal-updates-icon { width: 28px; height: 28px; background: none; }
+.home-updates .personal-updates-heading h2 { font-size: 16px; }
+.home-updates .personal-update-card h3 { font-size: 17px; }
+.home-updates .personal-update-reason, .home-updates .personal-update-empty { font-size: 14px; }
+.home-updates .personal-update-actions { gap: 5px; }
+.home-updates .personal-update-actions .button { font-size: 12px; min-height: 44px; padding-inline: 9px; }
+.personal-update-details { margin-block: 6px 10px; }
+.personal-update-details > summary { display: flex; align-items: center; min-height: 44px; font-size: 12px; color: var(--muted); cursor: pointer; }
+.personal-update-details[open] > summary { color: var(--accent); }
+.home-updates .tracked-requests { padding: 0 16px; }
+.home-planning-fold { min-width: 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.home-planning-fold > summary { padding: 12px 16px; min-height: 50px; font-size: 14px; cursor: pointer; }
+.home-planning-fold > .planning-nudge { border: 0; border-top: 1px solid var(--border); border-radius: 0; }
+.home-focus-tasks .panel-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.home-focus-tasks .panel-footer > .field-help { font-size: 11px; margin: 0; }
+.home-updates .tracked-requests, .home-updates .planning-nudge { margin: 0; }
+.home-updates .tracked-requests > summary { font-size: 14px; min-height: 50px; display: flex; align-items: center; gap: 8px; }
+.home-updates .tracked-request { padding-block: 12px; }
+.home-updates .tracked-request h3 { font-size: 15px; }
+.home-updates .planning-nudge { padding: 17px; }
+.home-updates .planning-nudge h2 { font-size: 16px; }
+.home-updates .planning-nudge p { font-size: 13px; }
+.home-mail .daily-mail { margin-top: 0; }
+.home-mail .gmail-message > h3 { font-size: 17px; }
+.home-mail .gmail-message > p { font-size: 14px; }
+.home-mail .daily-mail .panel-heading { padding: 17px 20px 12px; }
+.dashboard-more { margin-block: 20px 12px; }
+.dashboard-more > summary { font-size: 14px; min-height: 50px; }
+.workspace-footer { padding-block: 16px; }
+.app-shell .assistant-launcher { border-radius: 10px; background: var(--surface-raised); border: 1px solid var(--border); color: var(--text); box-shadow: none; font-size: 13px; }
+.app-shell .assistant-launcher:hover { background: var(--surface-hover); }
+
+/* Academic records read as concise rows; planning remains available on demand. */
+.academic-toolbar { gap: 12px 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.academic-toolbar > div:first-child { flex: 1; min-width: 0; }
+.academic-toolbar > .academic-manual-tools { flex: 0 1 auto; width: auto; }
+.academic-toolbar > .academic-manual-tools[open] { flex-basis: 100%; }
+.academic-manual-tools > summary { min-height: 44px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.academic-manual-tools > summary::before { content: "+"; color: var(--accent); }
+.academic-manual-tools[open] > summary::before { content: "−"; }
+.academic-toolbar h2 { font-size: 18px; }
+.academic-workspace .academic-deadlines { margin-bottom: 18px; padding: 0; }
+.academic-workspace .academic-list { padding-inline: 20px; }
+.academic-workspace .academic-list > li { padding-block: 13px; align-items: center; }
+.deadline-list .academic-record-content { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 18px; align-items: center; }
+.deadline-list .academic-record-content > strong { grid-column: 1; grid-row: 1; font-size: 15px; }
+.deadline-list .record-meta { grid-column: 2; grid-row: 1; margin: 0; justify-content: flex-end; }
+.deadline-list .deadline-course { grid-column: 1; grid-row: 2; justify-self: start; min-height: 44px; font-size: 12px; margin: 0; }
+.deadline-list .item-extra { grid-column: 2; grid-row: 2; margin: 0; min-width: 0; }
+.deadline-list .item-extra > summary { min-height: 44px; justify-content: flex-end; font-size: 12px; }
+.deadline-list .item-extra[open] { grid-column: 1 / -1; grid-row: 3; }
+.deadline-list .item-extra[open] > summary { justify-content: flex-start; }
+.course-grid { gap: 14px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.course-card { padding: 18px; border-radius: 12px; }
+.course-card-top { margin-bottom: 12px; }
+.course-card h3 { font-size: 17px; }
+.course-card-stats { font-size: 12px; }
+.course-heading h2 { font-size: 24px; }
+.academic-tabs button { min-height: 44px; font-size: 13px; }
+.class-time-block { border-radius: 9px; font-size: 13px; }
+.calendar-toolbar { gap: 10px; }
+.settings-layout .panel-heading { padding: 18px 20px 14px; }
+.button-primary { box-shadow: none; }
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .app-shell { grid-template-columns: 184px minmax(0, 1fr); }
+  .sidebar { padding-inline: 10px; }
+  .main-content { padding-inline: 22px; }
+  .topbar { padding-inline: 22px; }
+  .home-dashboard-grid, .view-dashboard .day-dashboard { grid-template-columns: minmax(0, 1.25fr) minmax(240px, 1fr); gap: 18px; }
+  .view-dashboard .day-metric { display: flex; flex-direction: column; align-items: start; padding-inline: 9px; }
+  .view-dashboard .day-metric span { align-self: start; font-size: 11px; }
+}
+@media (max-width: 760px) {
+  .app-shell { display: block; }
+  .sidebar { grid-template-columns: 1fr; padding: 7px 9px calc(8px + env(safe-area-inset-bottom, 0px)); background: var(--surface); box-shadow: none; }
+  .sidebar .main-nav { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .sidebar .sidebar-bottom { display: none; }
+  .sidebar .main-nav a { min-height: 51px; padding: 5px 1px; gap: 4px; border-radius: 10px; font-size: 10px; }
+  .sidebar .main-nav a[aria-current="page"]::before { top: -8px; bottom: auto; inset-inline-start: calc(50% - 11px); height: 2px; width: 22px; }
+  .sidebar .nav-count { min-width: 15px; height: 15px; font-size: 9px; inset-inline-end: 14%; }
+  .workspace { padding-bottom: calc(85px + env(safe-area-inset-bottom, 0px)); }
+  .topbar { min-height: 60px; padding-inline: 16px; }
+  .breadcrumb { gap: 6px; font-size: 11px; min-width: 0; }
+  .breadcrumb strong { font-size: 12px; }
+  .topbar-actions { gap: 0; }
+  .mobile-settings-button, .mobile-assistant-button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 10px; background: none; color: var(--muted); }
+  .mobile-settings-button[aria-current="page"] { color: var(--accent); background: var(--accent-soft); }
+  .main-content { padding: 18px 16px 0; }
+  .page-heading, .view-dashboard .page-heading { margin-bottom: 18px; gap: 10px; }
+  .page-heading h1, .view-dashboard .page-heading h1 { font-size: 26px; line-height: 1.3; }
+  .page-heading .greeting { font-size: 12px; margin-bottom: 5px; }
+  .page-heading > .button { font-size: 12px; padding-inline: 10px; }
+  .panel-heading { padding: 16px 16px 12px; }
+  .panel-heading h2, .panel h2 { font-size: 17px; }
+  .panel-footer { padding-inline: 16px; }
+  .task-list { padding-inline: 16px; }
+  .task-row { padding-block: 12px; gap: 10px; }
+  .record-title { font-size: 15px; }
+  .record-meta { font-size: 12px; }
+  .view-dashboard .day-dashboard { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 19px; }
+  .view-dashboard .day-board { grid-column: 1; grid-row: 1; padding: 0; border: 0; border-radius: 0; background: none; }
+  .view-dashboard .day-board-heading { display: none; }
+  .view-dashboard .day-ribbon { gap: 4px; }
+  .view-dashboard .day-ribbon a { padding: 5px 2px; min-height: 52px; border-radius: 10px; }
+  .view-dashboard .day-ribbon a.is-today { background: var(--surface-raised); }
+  .view-dashboard .day-focus { grid-column: 1; grid-row: 2; padding: 15px 17px; }
+  .view-dashboard .day-focus-label { font-size: 12px; }
+  .view-dashboard .day-focus-event { margin: 10px 0 0; gap: 8px; }
+  .view-dashboard .day-focus-event > strong { font-size: 21px; }
+  .view-dashboard .day-focus-event > span { font-size: 13px; }
+  .view-dashboard .day-focus-room { padding-top: 9px; }
+  .view-dashboard .day-metrics { grid-column: 1; grid-row: 3; }
+  .view-dashboard .day-metric { grid-template-columns: auto 1fr; gap: 6px; padding: 10px 8px; align-items: center; }
+  .view-dashboard .day-metric strong { grid-row: auto; font-size: 19px; }
+  .view-dashboard .day-metric span { font-size: 10px; line-height: 1.5; }
+  .home-dashboard-grid { display: flex; flex-direction: column; gap: 17px; }
+  .home-work, .home-updates, .home-mail { width: 100%; }
+  .home-work > .panel { margin-bottom: 14px; }
+  .home-work .dashboard-columns { gap: 14px; }
+  .home-work .task-list { padding-inline: 16px; }
+  .home-work .task-row { padding-block: 12px; }
+  .home-work > .panel > .field-help { padding-inline: 16px; font-size: 12px; }
+  .home-updates { display: contents; }
+  .home-updates .day-focus { order: -1; width: 100%; }
+  .home-updates .personal-updates, .home-updates .tracked-requests, .home-updates .planning-nudge { width: 100%; }
+  .home-updates .personal-updates { order: 1; }
+  .home-updates .tracked-requests { order: 3; }
+  .home-updates .planning-nudge { order: 4; }
+  .home-planning-fold { order: 4; width: 100%; }
+  .home-updates .personal-updates { padding: 16px; }
+  .home-updates .personal-update-card h3 { font-size: 17px; }
+  .home-mail { order: 2; }
+  .dashboard-more > summary { font-size: 13px; }
+  .academic-workspace .section-fold > summary { font-size: 15px; }
+  .academic-toolbar > .academic-manual-tools { flex-basis: 100%; }
+  .academic-workspace .academic-list { padding-inline: 16px; }
+  .academic-workspace .academic-list > li { padding-block: 12px; }
+  .deadline-list .academic-record-content { column-gap: 10px; }
+  .deadline-list .academic-record-content > strong { grid-column: 1 / -1; font-size: 15px; }
+  .deadline-list .record-meta { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; font-size: 12px; margin-top: 4px; }
+  .deadline-list .deadline-course { grid-row: 3; }
+  .deadline-list .item-extra { grid-row: 3; }
+  .deadline-list .item-extra[open] { grid-row: 4; }
+  .academic-workspace .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 12px; }
+  .course-card { padding: 13px; }
+  .course-card h3 { font-size: 15px; line-height: 1.5; }
+  .course-card-top { margin-bottom: 10px; gap: 6px; }
+  .course-card-top > svg { width: 19px; height: 19px; }
+  .course-card-stats { gap: 6px; flex-wrap: wrap; font-size: 11px; }
+  .course-heading h2 { font-size: 21px; }
+  .settings-layout { gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .day-ribbon a, .main-nav a, .button { transition: none; }
+}
+@media (forced-colors: active) {
+  .day-focus, .day-metrics, .main-nav a[aria-current="page"] { border: 1px solid CanvasText; }
+}

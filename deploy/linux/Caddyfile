@@ -1,0 +1,4 @@
+# FUTURE PUBLICATION ONLY. Installing/starting this edge needs separate approval.
+{$LIFEOS_PUBLIC_ORIGIN} {
+    reverse_proxy 127.0.0.1:{$LIFEOS_WEB_PORT:3000}
+}

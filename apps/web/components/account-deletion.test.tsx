@@ -1,0 +1,31 @@
+import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
+import {afterEach,expect,it,vi} from 'vitest';
+import {api} from '@/lib/api';
+import {AccountDeletionSettings} from './account-deletion';
+vi.mock('@/lib/api',()=>({api:vi.fn()}));
+afterEach(()=>{cleanup();vi.clearAllMocks();});
+it('requires a review and exact username before confirming deletion',async()=>{
+  vi.mocked(api).mockResolvedValueOnce({id:'fixture-review',login:'fixture-owner',counts:{tasks:3},expires:9999999999}).mockResolvedValueOnce({deleted:true,cleanup_pending:false});
+  const finished=vi.fn();
+  render(<AccountDeletionSettings csrf="fixture" t={(_he,en)=>en} onDeleted={finished}/>);
+  fireEvent.click(screen.getByText('Review account deletion'));
+  expect(await screen.findByText('fixture-owner')).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText('Current password'),{target:{value:'fixture password'}});
+  fireEvent.change(screen.getByLabelText('Type your username'),{target:{value:'wrong-owner'}});
+  expect(screen.getByText('Delete my LifeOS account')).toBeDisabled();
+  fireEvent.change(screen.getByLabelText('Type your username'),{target:{value:'fixture-owner'}});
+  fireEvent.click(screen.getByText('Delete my LifeOS account'));
+  await waitFor(()=>expect(finished).toHaveBeenCalled());
+  expect(api).toHaveBeenLastCalledWith('accounts/deletion/confirm','POST',{preview_id:'fixture-review',login:'fixture-owner',password:'fixture password'},'fixture');
+});
+it('does not claim successful deletion if archive cleanup is pending',async()=>{
+  vi.mocked(api).mockResolvedValueOnce({id:'fixture-review',login:'fixture-owner',counts:{},expires:9999999999}).mockResolvedValueOnce({deleted:false,cleanup_pending:true});
+  const finished=vi.fn();
+  render(<AccountDeletionSettings csrf="fixture" t={(_he,en)=>en} onDeleted={finished}/>);
+  fireEvent.click(screen.getByText('Review account deletion'));await screen.findByText('fixture-owner');
+  fireEvent.change(screen.getByLabelText('Current password'),{target:{value:'fixture password'}});
+  fireEvent.change(screen.getByLabelText('Type your username'),{target:{value:'fixture-owner'}});
+  fireEvent.click(screen.getByText('Delete my LifeOS account'));
+  expect(await screen.findByRole('status')).toHaveTextContent('Your account is disabled. Archive cleanup still needs operator attention; deletion is not complete.');
+  expect(finished).not.toHaveBeenCalled();
+});

@@ -1,0 +1,57 @@
+import { test, expect } from "@playwright/test";
+import { BASE, prepareFixtures } from "./helpers";
+import { dayKey, shiftDay } from "../../lib/dates";
+test.beforeEach(async ({ playwright }) => prepareFixtures(playwright));
+
+test("cross-course deadlines filter, complete linked tasks and remain usable on mobile", async ({ page }) => {
+  await page.goto("/?view=academic");
+  await page.getByLabel("הסיסמה שלך").fill("lifeos automated test password");
+  await page.getByRole("button", { name: "כניסה למרחב שלך" }).click();
+  await expect(page.locator("#page-title")).toBeVisible();
+  const session = await (await page.request.get("/api/session")).json();
+  expect(session.test_mode).toBe(true);
+  const headers = { Origin: BASE, "X-CSRF-Token": session.csrf };
+  async function create(kind: string, data: object) {
+    const response = await page.request.post(`/api/academic/${kind}`, { headers, data });
+    expect(response.ok()).toBe(true);
+    return response.json();
+  }
+  const today = dayKey(new Date(), "Asia/Jerusalem");
+  const first = await create("terms", { name: "Current fixture term", start_date: shiftDay(today,-30), end_date: shiftDay(today,90) });
+  const second = await create("terms", { name: "Other fixture term", start_date: shiftDay(today,-30), end_date: shiftDay(today,90) });
+  const algebra = await create("courses", { name: "Algebra fixture", term_id: first.id });
+  const physics = await create("courses", { name: "Physics fixture", term_id: second.id });
+  const late = await create("items", { title: "Overdue assignment fixture", course_id: algebra.id, kind: "assignment", due: shiftDay(today,-1) });
+  await create("items", { title: "Upcoming exam fixture", course_id: physics.id, kind: "exam", due: shiftDay(today,2) });
+  await page.reload();
+  const overview = page.getByRole("region", { name: "מטלות ומבחנים", exact: true });
+  await expect(overview.getByRole("listitem")).toHaveCount(2);
+  await expect(overview.getByRole("listitem").first()).toContainText(late.title);
+  await expect(page.getByText("ניהול ידני · Moodle לא מחובר", {exact:true})).toHaveCount(0);
+  await page.setViewportSize({width:320,height:740});
+  expect(await overview.evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
+  await overview.screenshot({path:"../../.runtime/screenshots/academic-deadlines-mobile.png"});
+  await overview.getByRole("checkbox", { name: `השלמה: ${late.title}` }).click();
+  await expect(overview.getByRole("listitem")).toHaveCount(1);
+  const tasks = await (await page.request.get("/api/tasks")).json();
+  expect(tasks.find((task:{id:string})=>task.id===late.task_id).completed).toBe(true);
+  await page.locator(".academic-scope > summary").click();
+  await page.getByLabel("סינון לפי סמסטר",{exact:true}).selectOption(first.id);
+  await expect(overview.getByRole("listitem")).toHaveCount(0);
+  await overview.locator(".simple-filters > summary").click();
+  await overview.getByLabel("מצב הפריטים").selectOption("completed");
+  await expect(overview.getByText(late.title,{exact:true})).toBeVisible();
+  await overview.getByRole("checkbox",{name:`פתיחה מחדש: ${late.title}`}).click();
+  await expect(overview.getByRole("listitem")).toHaveCount(0);
+  await overview.getByLabel("מצב הפריטים").selectOption("open");
+  await overview.getByRole("button",{name:"פתיחת קורס: Algebra fixture"}).click();
+  await expect(page).toHaveURL(new RegExp(`course=${algebra.id}`));
+  const settings = await (await page.request.get("/api/settings")).json();
+  expect((await page.request.put("/api/settings",{headers,data:{...settings,language:"en",theme:"light"}})).ok()).toBe(true);
+  await page.goto("/?view=academic");
+  const english = page.getByRole("region",{name:"Assignments and exams",exact:true});
+  await english.locator(".simple-filters > summary").click();
+  await english.getByLabel("Item type").selectOption("exam");
+  await expect(english.getByRole("listitem")).toHaveCount(1);
+  await expect(english.getByText("Upcoming exam fixture",{exact:true})).toBeVisible();
+});

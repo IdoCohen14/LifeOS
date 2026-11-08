@@ -1,0 +1,14 @@
+import {test,expect} from '@playwright/test';
+import {BASE,prepareFixtures,openDashboardTool} from './helpers';
+import {dayKey,shiftDay} from '../../lib/dates';
+test.beforeEach(async({playwright})=>prepareFixtures(playwright));
+test('academic review, weekly hours and upcoming-event opt-in work together',async({page})=>{
+ await page.goto('/');await page.getByLabel('הסיסמה שלך').fill('lifeos automated test password');await page.getByRole('button',{name:'כניסה למרחב שלך'}).click();await expect(page.locator('#page-title')).toBeVisible();const session=await(await page.request.get('/api/session')).json();expect(session.test_mode).toBe(true);const headers={Origin:BASE,'X-CSRF-Token':session.csrf};const today=dayKey(new Date(),'Asia/Jerusalem');
+ const term=await page.request.post('/api/academic/terms',{headers,data:{name:'Review term fixture',start_date:shiftDay(today,-7),end_date:shiftDay(today,90)}});expect(term.ok()).toBe(true);const course=await page.request.post('/api/academic/courses',{headers,data:{term_id:(await term.json()).id,name:'Review course fixture'}});expect(course.ok()).toBe(true);const courseId=(await course.json()).id;
+ expect((await page.request.post('/api/academic/grades',{headers,data:{course_id:courseId,title:'Grade fixture',score:80,maximum:100,weight:50}})).ok()).toBe(true);expect((await page.request.post('/api/academic/items',{headers,data:{course_id:courseId,title:'Upcoming exam fixture',kind:'exam',due:shiftDay(today,1)}})).ok()).toBe(true);
+ expect((await page.request.post('/api/events',{headers,data:{title:'Upcoming meeting fixture',start:new Date(Date.now()+2*3600000).toISOString(),end:new Date(Date.now()+2.75*3600000).toISOString()}})).ok()).toBe(true);
+ await page.reload();await openDashboardTool(page,'תמונת הלימודים שלי');await page.getByRole('button',{name:'הצגת נתוני הלימודים',exact:true}).click();const snapshot=page.locator('.academic-snapshot');await expect(snapshot).toContainText('משוקלל לחלק שהוזן: 80 מתוך 100');await expect(snapshot).toContainText('Upcoming exam fixture');
+ await openDashboardTool(page,'מבט יומי ושבועי');
+ await page.getByRole('group',{name:'טווח הסיכום',exact:true}).getByRole('button',{name:'7 ימים',exact:true}).click();await expect(page.locator('.planning-load-track')).toHaveCount(7);await expect(page.locator('.planning-days')).toContainText('שעות מתוזמנות');
+ await page.getByRole('button',{name:/^מרכז התראות/}).click();const dialog=page.getByRole('dialog');await dialog.getByText('העדפות התראות',{exact:true}).click();await dialog.getByLabel('אירועים מתקרבים ועדכוני Moodle · באפליקציה בלבד',{exact:true}).check();await dialog.getByRole('button',{name:'שמירת העדפות',exact:true}).click();await expect(dialog).toContainText('Upcoming meeting fixture');expect((await(await page.request.get('/api/notifications')).json()).preferences.events).toBe(true);
+});

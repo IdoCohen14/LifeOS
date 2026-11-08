@@ -1,0 +1,15 @@
+[Unit]
+Description=LifeOS offline schema migration
+Before=lifeos-api.service lifeos-web.service lifeos-worker.service
+PartOf=lifeos.target
+
+[Service]
+Type=oneshot
+User=lifeos
+Group=lifeos
+WorkingDirectory=/opt/lifeos
+EnvironmentFile=/etc/lifeos/runtime.env
+ExecStart=/opt/lifeos/.venv/bin/python /opt/lifeos/scripts/server_manage.py migrate
+RemainAfterExit=yes
+UMask=0077
+NoNewPrivileges=yes

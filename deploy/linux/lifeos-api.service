@@ -1,0 +1,16 @@
+[Unit]
+Description=LifeOS private API
+Requires=lifeos-init.service
+After=lifeos-init.service
+PartOf=lifeos.target
+
+[Service]
+User=lifeos
+Group=lifeos
+WorkingDirectory=/opt/lifeos/services/api
+EnvironmentFile=/etc/lifeos/runtime.env
+ExecStart=/opt/lifeos/.venv/bin/python -m uvicorn lifeos.main:create_app --factory --host 127.0.0.1 --port ${LIFEOS_API_PORT} --no-access-log
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=yes

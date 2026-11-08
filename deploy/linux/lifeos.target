@@ -1,0 +1,7 @@
+[Unit]
+Description=LifeOS persistent account services (loopback only)
+Requires=lifeos-api.service lifeos-web.service lifeos-worker.service
+After=lifeos-init.service
+
+[Install]
+WantedBy=multi-user.target

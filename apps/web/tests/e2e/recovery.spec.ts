@@ -1,0 +1,37 @@
+import { test, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
+import { prepareFixtures } from "./helpers";
+
+test.beforeAll(async ({ playwright }) => prepareFixtures(playwright));
+test("encrypted backups download and scoped JSON export work without revealing passwords", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("הסיסמה שלך").fill("lifeos automated test password");
+  await page.getByRole("button", { name: "כניסה למרחב שלך" }).click();
+  await page.getByRole("link", { name: "הגדרות", exact: true }).click();
+  await page.locator("summary").getByText("גיבוי ושחזור", { exact: true }).click();
+  const panel = page.getByRole("region", { name: "גיבוי וייצוא", exact: true });
+  const password = "isolated browser backup fixture password";
+  await panel.getByLabel("סיסמת גיבוי", { exact: true }).fill(password);
+  await panel.getByLabel("אימות סיסמת גיבוי", { exact: true }).fill(password + "different");
+  await panel.getByRole("button", { name: "יצירת גיבוי מוצפן", exact: true }).click();
+  await expect(panel.getByRole("alert")).toHaveText("סיסמאות הגיבוי אינן תואמות.");
+  await panel.getByLabel("אימות סיסמת גיבוי", { exact: true }).fill(password);
+  await panel.getByRole("button", { name: "יצירת גיבוי מוצפן", exact: true }).click();
+  await expect(panel.getByRole("status")).toContainText("הגיבוי המוצפן נוצר");
+  await expect(panel.getByLabel("סיסמת גיבוי", { exact: true })).toHaveValue("");
+  const downloadPromise = page.waitForEvent("download");
+  await panel.getByRole("button", { name: "הורדת גיבוי", exact: true }).first().click();
+  const download = await downloadPromise;
+  const backupBytes = await readFile((await download.path())!);
+  expect(backupBytes.subarray(0, 10).toString()).toBe("LIFEOSBK1\n");
+  expect(backupBytes.includes(Buffer.from(password))).toBe(false);
+  const exportPromise = page.waitForEvent("download");
+  await panel.getByRole("button", { name: "הורדת ייצוא JSON", exact: true }).click();
+  const exported = await exportPromise;
+  const json = JSON.parse(await readFile((await exported.path())!, "utf-8"));
+  expect(json.format).toBe("lifeos-personal-export");
+  expect(Object.keys(json).sort()).toEqual(["format", "version", "created_at", "settings", "tasks", "events"].sort());
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await panel.screenshot({ path: "../../.runtime/screenshots/recovery-mobile.png" });
+});

@@ -1,0 +1,21 @@
+import {test,expect} from '@playwright/test';
+import {BASE,prepareFixtures} from './helpers';
+import {dayKey,shiftDay} from '../../lib/dates';
+test.beforeEach(async({playwright})=>prepareFixtures(playwright));
+test('reviewed course rows save together only after explicit approval',async({page})=>{
+ await page.goto('/?view=academic');await page.getByLabel('הסיסמה שלך').fill('lifeos automated test password');await page.getByRole('button',{name:'כניסה למרחב שלך'}).click();await expect(page.locator('#page-title')).toBeVisible();
+ const session=await(await page.request.get('/api/session')).json();expect(session.test_mode).toBe(true);const today=dayKey(new Date(),'Asia/Jerusalem');
+ const term=await page.request.post('/api/academic/terms',{headers:{Origin:BASE,'X-CSRF-Token':session.csrf},data:{name:'Batch browser term fixture',start_date:today,end_date:shiftDay(today,90)}});expect(term.ok()).toBe(true);
+ await page.reload();await page.locator('.academic-manual-tools > summary').click();await page.getByRole('button',{name:'הוספת כמה קורסים',exact:true}).click();const dialog=page.getByRole('dialog');
+ await expect(dialog.getByLabel('סמסטר',{exact:true})).toHaveValue('');await dialog.getByLabel('סמסטר',{exact:true}).selectOption((await term.json()).id);
+ await dialog.getByLabel('שם הקורס 1',{exact:true}).fill('Batch algebra fixture');await dialog.getByLabel('קוד קורס 1',{exact:true}).fill('MAT1');await dialog.getByLabel('נקודות זכות 1',{exact:true}).fill('4');
+ await dialog.getByLabel('שם הקורס 2',{exact:true}).fill('Batch physics fixture');await dialog.getByRole('button',{name:'סקירת הקורסים לפני שמירה',exact:true}).click();
+ await expect(dialog.getByRole('button',{name:'אישור יצירת 2 קורסים',exact:true})).toBeVisible();expect(await(await page.request.get('/api/academic/courses')).json()).toHaveLength(0);
+ await page.setViewportSize({width:320,height:740});expect(await dialog.evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
+ await dialog.getByRole('button',{name:'חזרה לעריכה',exact:true}).click();await expect(dialog.getByLabel('שם הקורס 1',{exact:true})).toHaveValue('Batch algebra fixture');
+ await dialog.getByRole('button',{name:'סקירת הקורסים לפני שמירה',exact:true}).click();await dialog.getByRole('button',{name:'אישור יצירת 2 קורסים',exact:true}).click();await expect(dialog.getByText('נוצרו 2 קורסים בסמסטר שנבחר.',{exact:true})).toBeVisible();
+ await dialog.getByRole('button',{name:'סגירה',exact:true}).click();await expect(page.locator('.course-card')).toHaveCount(2);await page.reload();await expect(page.locator('.course-card')).toHaveCount(2);
+ await page.locator('.academic-manual-tools > summary').click();
+ await page.getByRole('button',{name:'הוספת כמה קורסים',exact:true}).click();await dialog.getByLabel('סמסטר',{exact:true}).selectOption((await term.json()).id);await dialog.getByLabel('שם הקורס 1',{exact:true}).fill('Batch algebra fixture');await dialog.getByLabel('שם הקורס 2',{exact:true}).fill('Other fixture');await dialog.getByRole('button',{name:'סקירת הקורסים לפני שמירה',exact:true}).click();await expect(dialog.getByRole('alert')).toContainText('כפולים');expect(await(await page.request.get('/api/academic/courses')).json()).toHaveLength(2);
+ const settings=await(await page.request.get('/api/settings')).json();expect((await page.request.put('/api/settings',{headers:{Origin:BASE,'X-CSRF-Token':session.csrf},data:{...settings,language:'en',theme:'light'}})).ok()).toBe(true);await page.goto('/?view=academic');await page.locator('.academic-manual-tools > summary').click();await page.getByRole('button',{name:'Add multiple courses',exact:true}).click();await dialog.getByLabel('Term',{exact:true}).selectOption((await term.json()).id);await dialog.getByLabel('Course name 1',{exact:true}).fill('English review fixture one');await dialog.getByLabel('Course name 2',{exact:true}).fill('English review fixture two');await dialog.getByRole('button',{name:'Review courses before saving',exact:true}).click();await expect(dialog.getByRole('button',{name:'Confirm creation of 2 courses',exact:true})).toBeVisible();await dialog.getByRole('button',{name:'Close',exact:true}).click();expect(await(await page.request.get('/api/academic/courses')).json()).toHaveLength(2);
+});

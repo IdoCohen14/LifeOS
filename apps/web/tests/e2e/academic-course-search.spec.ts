@@ -1,0 +1,56 @@
+import { test, expect } from "@playwright/test";
+import { BASE, prepareFixtures } from "./helpers";
+import { dayKey, shiftDay } from "../../lib/dates";
+test.beforeEach(async({playwright})=>prepareFixtures(playwright));
+test("course search filters all overview sections but keeps actual setup and capture options",async({page})=>{
+ await page.goto("/?view=academic");
+ await page.getByLabel("הסיסמה שלך").fill("lifeos automated test password");
+ await page.getByRole("button",{name:"כניסה למרחב שלך"}).click();
+ await expect(page.locator("#page-title")).toBeVisible();
+ const session=await (await page.request.get("/api/session")).json();expect(session.test_mode).toBe(true);
+ const headers={Origin:BASE,"X-CSRF-Token":session.csrf};
+ async function create(kind:string,data:object){const response=await page.request.post(`/api/academic/${kind}`,{headers,data});expect(response.ok()).toBe(true);return response.json();}
+ const today=dayKey(new Date(),"Asia/Jerusalem");
+ const first=await create("terms",{name:"Search term one",start_date:today,end_date:shiftDay(today,90)});
+ const second=await create("terms",{name:"Search term two",start_date:today,end_date:shiftDay(today,90)});
+ for(const [name,code,instructor,term_id] of [["Algebra fixture","MAT101","Dr Cohen",first.id],["Physics fixture","PHY101","Dr Smith",second.id]]){
+  const course=await create("courses",{name,code,instructor,term_id});
+  await create("items",{course_id:course.id,title:`Deadline ${code}`,due:shiftDay(today,2),kind:"assignment"});
+  await create("timetable",{course_id:course.id,weekday:0,start_time:"09:00",end_time:"11:00",timezone:"Asia/Jerusalem",location:`Room ${code}`});
+ }
+ const before=await (await page.request.get("/api/academic/items")).json();
+ await page.reload();
+ await page.locator(".academic-scope > summary").click();
+ await page.locator(".section-fold").filter({has:page.locator(".course-grid")}).locator(":scope > summary").click();
+ const search=page.getByLabel("חיפוש קורסים",{exact:true});await expect(search).toBeVisible();
+ await search.fill(" phy101 ");
+ await expect(page.locator(".course-card")).toHaveCount(1);
+ const deadlines=page.getByRole("region",{name:"מטלות ומבחנים",exact:true});
+ await expect(deadlines.getByText("Deadline PHY101",{exact:true})).toBeVisible();
+ await expect(deadlines.getByText("Deadline MAT101",{exact:true})).toHaveCount(0);
+ await page.locator(".section-fold").filter({has:page.locator(".academic-weekly")}).locator(":scope > summary").click();
+ const weekly=page.getByRole("region",{name:"מערכת שעות שבועית",exact:true});await weekly.locator("summary").click();
+ await expect(weekly.getByText("Room PHY101",{exact:true})).toBeVisible();
+ await expect(weekly.getByText("Room MAT101",{exact:true})).toHaveCount(0);
+ await search.fill("missing fixture");
+ await expect(page.locator(".course-card")).toHaveCount(0);
+ await expect(page.getByText("לא נמצאו קורסים שתואמים לחיפוש ולסמסטר. אפשר לנקות את החיפוש או לבחור סמסטר אחר.",{exact:true})).toBeVisible();
+ await expect(page.getByText("3/3 הוגדרו",{exact:true})).toBeVisible();
+ await page.locator(".academic-manual-tools > summary").click();
+ await page.getByRole("button",{name:"מטלה או מבחן חדש",exact:true}).click();
+ await expect(page.getByRole("dialog").getByLabel("קורס",{exact:true}).getByRole("option")).toHaveCount(3);
+ await page.getByRole("dialog").getByRole("button",{name:"סגירה",exact:true}).click();
+ await page.getByRole("button",{name:"ניקוי חיפוש קורסים",exact:true}).click();
+ await expect(page.locator(".course-card")).toHaveCount(2);
+ await search.fill("smith");
+ await page.getByLabel("סינון לפי סמסטר",{exact:true}).selectOption(first.id);
+ await expect(page.locator(".course-card")).toHaveCount(0);
+ await page.getByLabel("סינון לפי סמסטר",{exact:true}).selectOption(second.id);
+ await expect(page.locator(".course-card")).toHaveCount(1);
+ await page.setViewportSize({width:320,height:740});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ expect(await (await page.request.get("/api/academic/items")).json()).toEqual(before);
+ const settings=await (await page.request.get("/api/settings")).json();
+ expect((await page.request.put("/api/settings",{headers,data:{...settings,language:"en",theme:"light"}})).ok()).toBe(true);
+ await page.goto("/?view=academic");await page.locator(".academic-scope > summary").click();await page.getByLabel("Course search",{exact:true}).fill("mat101");
+ await expect(page.locator(".course-card")).toHaveCount(1);await expect(page.locator(".course-card")).toContainText("Algebra fixture");
+});

@@ -1,0 +1,52 @@
+import { test,expect } from '@playwright/test';
+import { BASE,prepareFixtures } from './helpers';
+import { dayKey,shiftDay } from '../../lib/dates';
+test.beforeEach(async({playwright})=>prepareFixtures(playwright));
+test('explicit type conversion reviews both ranges and leaves multi-day sources unchanged',async({page})=>{
+ await page.goto('/?view=calendar');
+ await page.getByLabel('הסיסמה שלך').fill('lifeos automated test password');
+ await page.getByRole('button',{name:'כניסה למרחב שלך'}).click();
+ await expect(page.getByRole('button',{name:'ניהול סדרות שבועיות',exact:true})).toBeVisible();
+ const session=await(await page.request.get('/api/session')).json();expect(session.test_mode).toBe(true);
+ const headers={Origin:BASE,'X-CSRF-Token':session.csrf};
+ const first=shiftDay(dayKey(new Date(),'Asia/Jerusalem'),1);
+ const created=await(await page.request.post('/api/recurrence/preview',{headers,data:{title:'Type conversion fixture',day:first,count:3,all_day:true,timezone:'Asia/Jerusalem'}})).json();
+ expect((await page.request.post('/api/recurrence/confirm',{headers,data:{id:created.id}})).ok()).toBe(true);
+ const rows=await(await page.request.get('/api/events')).json();
+ expect((await page.request.put(`/api/events/${rows[1].id}`,{headers,data:{...rows[1],end:shiftDay(rows[1].start,3)}})).ok()).toBe(true);
+ const before=await(await page.request.get('/api/events')).json();
+ await page.reload();
+ await page.getByRole('button',{name:'ניהול סדרות שבועיות',exact:true}).click();
+ const dialog=page.getByRole('dialog',{name:'ניהול סדרות שבועיות',exact:true});
+ await dialog.getByLabel('פעולה בסדרה',{exact:true}).selectOption('convert');
+ await expect(dialog.getByLabel('סוג האירוע החדש',{exact:true})).toHaveValue('');
+ await dialog.getByLabel('סוג האירוע החדש',{exact:true}).selectOption('timed');
+ await dialog.getByLabel('שעה חדשה למופעים',{exact:true}).fill('11:00');
+ await dialog.getByLabel('משך חדש בדקות',{exact:true}).fill('90');
+ await dialog.getByLabel('לכלול גם מופעים שנערכו או שמצב המקור שלהם אינו ידוע',{exact:true}).check();
+ await dialog.getByRole('button',{name:'תצוגה מקדימה להמרת סוג',exact:true}).click();
+ await expect(dialog.getByText('1 מופעים של כמה ימים לא הומרו. אפשר לערוך אותם בנפרד ביומן.',{exact:true})).toBeVisible();
+ await expect(dialog.locator('.recurring-preview-list li')).toHaveCount(2);
+ expect(await(await page.request.get('/api/events')).json()).toEqual(before);
+ await page.setViewportSize({width:390,height:844});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await dialog.screenshot({path:'../../.runtime/screenshots/series-types-mobile.png'});
+ await dialog.getByRole('button',{name:'אישור המרת סוג של 2 מופעים',exact:true}).click();
+ await expect(dialog.getByText('הומר הסוג של 2 מופעים שנבדקו.',{exact:true})).toBeVisible();
+ const after=await(await page.request.get('/api/events')).json();
+ for(const old of before){
+  const current=after.find((row:{id:string})=>row.id===old.id);
+  if(old.id===rows[1].id) expect(current).toEqual(old);
+  else {expect(current.all_day).toBe(false);expect(Date.parse(current.end)-Date.parse(current.start)).toBe(90*60000);expect(current.title).toBe(old.title);expect(current.notes).toBe(old.notes);}
+ }
+ await dialog.getByRole('button',{name:'סגירה',exact:true}).click();
+ expect((await page.request.put('/api/settings',{headers,data:{language:'en',theme:'light',timezone:'Asia/Jerusalem'}})).ok()).toBe(true);
+ await page.reload();await page.getByRole('button',{name:'Manage weekly series',exact:true}).click();
+ await page.getByLabel('Series action',{exact:true}).selectOption('convert');
+ await page.getByLabel('New occurrence type',{exact:true}).selectOption('all_day');
+ await page.getByRole('button',{name:'Preview type conversion',exact:true}).click();
+ await expect(page.locator('.recurring-preview-list li')).toHaveCount(2);
+ await page.getByRole('button',{name:'Confirm type conversion for 2 occurrences',exact:true}).click();
+ await expect(page.getByText('Type converted for 2 reviewed occurrences.',{exact:true})).toBeVisible();
+ expect(await(await page.request.get('/api/events')).json()).toEqual(before);
+});

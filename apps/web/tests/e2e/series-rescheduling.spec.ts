@@ -1,0 +1,53 @@
+import { test, expect } from '@playwright/test';
+import { BASE, prepareFixtures } from './helpers';
+import { dayKey, shiftDay } from '../../lib/dates';
+
+test.beforeEach(async ({ playwright }) => prepareFixtures(playwright));
+test('weekly clock changes review old/new times and preserve individual edits', async ({ page }) => {
+  await page.goto('/?view=calendar');
+  await page.getByLabel('הסיסמה שלך').fill('lifeos automated test password');
+  await page.getByRole('button', { name: 'כניסה למרחב שלך' }).click();
+  await expect(page.getByRole('button', { name: 'ניהול סדרות שבועיות', exact: true })).toBeVisible();
+  const session = await (await page.request.get('/api/session')).json();
+  expect(session.test_mode).toBe(true);
+  const headers = { Origin: BASE, 'X-CSRF-Token': session.csrf };
+  const first = shiftDay(dayKey(new Date(), 'Asia/Jerusalem'), 1);
+  const created = await page.request.post('/api/recurrence/preview', { headers, data: { title: 'Clock browser fixture', day: first, count: 3, clock: '09:00', duration: 60, timezone: 'Asia/Jerusalem' } });
+  expect(created.ok()).toBe(true);
+  expect((await page.request.post('/api/recurrence/confirm', { headers, data: { id: (await created.json()).id } })).ok()).toBe(true);
+  const before = await (await page.request.get('/api/events')).json();
+  const edited = await (await page.request.put(`/api/events/${before[1].id}`, { headers, data: { ...before[1], title: 'Protected clock fixture' } })).json();
+  await page.reload();
+  await page.getByRole('button', { name: 'ניהול סדרות שבועיות', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'ניהול סדרות שבועיות', exact: true });
+  await dialog.getByLabel('פעולה בסדרה').selectOption('reschedule');
+  await dialog.getByLabel('שעה חדשה למופעים').fill('11:00');
+  await dialog.getByLabel('משך חדש בדקות').fill('45');
+  await dialog.getByRole('button', { name: 'תצוגה מקדימה לשינוי שעות', exact: true }).click();
+  await expect(dialog.locator('.recurring-preview-list li')).toHaveCount(2);
+  await expect(dialog.getByText('1 מופעים שנערכו או שמצבם אינו ידוע לא נבחרו.', { exact: true })).toBeVisible();
+  await expect(dialog.getByText('שעה חדשה:', { exact: false }).first()).toBeVisible();
+  expect(await (await page.request.get('/api/events')).json()).toEqual(before.map((event: {id: string}) => event.id === edited.id ? edited : event));
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: '../../.runtime/screenshots/series-rescheduling-mobile.png', fullPage: true });
+  await dialog.getByRole('button', { name: 'אישור שינוי שעות של 2 מופעים', exact: true }).click();
+  await expect(dialog.getByText('עודכנו השעות של 2 מופעים שנבדקו.', { exact: true })).toBeVisible();
+  const after = await (await page.request.get('/api/events')).json();
+  expect(after.find((value: {id: string}) => value.id === edited.id)).toEqual(edited);
+  for (const event of after.filter((value: {id: string}) => value.id !== edited.id)) {
+    const source = before.find((value: {id: string}) => value.id === event.id);
+    expect(new Date(event.end).getTime() - new Date(event.start).getTime()).toBe(45 * 60000);
+    expect(event.title).toBe(source.title);
+    expect(new Intl.DateTimeFormat('en', { timeZone: 'Asia/Jerusalem', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(event.start))).toBe('11:00');
+  }
+  await dialog.getByRole('button', { name: 'סגירה', exact: true }).click();
+  expect((await page.request.put('/api/settings', { headers, data: { language: 'en', theme: 'light', timezone: 'Asia/Jerusalem' } })).ok()).toBe(true);
+  await page.reload();
+  await page.getByRole('button', { name: 'Manage weekly series', exact: true }).click();
+  const english = page.getByRole('dialog', { name: 'Manage weekly series', exact: true });
+  await english.getByLabel('Series action', { exact: true }).selectOption('reschedule');
+  await expect(english.getByLabel('New occurrence time')).toBeVisible();
+  await expect(english.getByRole('button', { name: 'Preview time changes', exact: true })).toBeVisible();
+  expect(await page.locator('html').getAttribute('dir')).toBe('ltr');
+});

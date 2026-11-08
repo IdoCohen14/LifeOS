@@ -1,0 +1,16 @@
+.assistant-launcher { position: fixed; inset-inline-end: 24px; bottom: 24px; z-index: 35; border-radius: 999px; box-shadow: 0 8px 28px #0003; gap: 9px; }
+.assistant-chat { display: grid; gap: 12px; min-width: 0; }
+.assistant-scope { color: var(--muted); font-size: .85rem; line-height: 1.7; margin: 0; }
+.assistant-transcript { max-height: 48vh; overflow-y: auto; display: grid; gap: 12px; padding: 3px; overscroll-behavior: contain; }
+.assistant-message { padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border); overflow-wrap: anywhere; min-width: 0; }
+.assistant-message p { white-space: pre-wrap; margin: 7px 0; }
+.assistant-message small { color: var(--muted); }
+.assistant-user { background: color-mix(in srgb, var(--accent) 10%, transparent); margin-inline-start: 20px; }
+.assistant-assistant { margin-inline-end: 12px; }
+.assistant-proposal { margin-top: 12px; padding: 14px; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 12px; }
+.assistant-proposal .form-actions { margin-top: 12px; flex-wrap: wrap; }
+.assistant-saved, .assistant-waiting { display: flex; gap: 8px; align-items: center; }
+.assistant-saved { color: var(--accent); }
+.assistant-input { display: flex; align-items: end; gap: 10px; }
+.assistant-input textarea { resize: vertical; flex: 1; min-width: 0; max-height: 140px; }
+@media (max-width: 700px) { .assistant-launcher { bottom: 92px; inset-inline-end: 16px; font-size: 12px; padding: 10px 14px; } .assistant-transcript { max-height: 40vh; } }

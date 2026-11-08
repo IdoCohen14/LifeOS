@@ -1,0 +1,153 @@
+/* Approved08.11 preview: one primary task surface, details on request. */
+:root { --bg: #15191f; --surface: #1b222c; --surface-raised: #242d3a; --surface-hover: #2c3746; --text: #edf1f7; --muted: #adb9ca; --dim: #a0aec0; --accent: #96b8ff; --accent-strong: #b6ceff; --accent-soft: #96b8ff15; --border: #ffffff15; --radius: 12px; --calm-next-bg: #202d43; --calm-next-text: #edf3ff; --calm-next-muted: #c5d5f0; }
+:root[data-theme="light"] { --bg: #f5f6f8; --surface: #ffffff; --surface-raised: #e8edf5; --surface-hover: #e1e8f2; --text: #232d3b; --muted: #536277; --dim: #5d6c7e; --accent: #315b9e; --accent-strong: #244a86; --accent-soft: #315b9e0d; --border: #24355122; --calm-next-bg: #e5edfa; --calm-next-text: #203957; --calm-next-muted: #405a7c; }
+.calm-shell { grid-template-columns: 176px minmax(0,1fr); }
+.calm-shell .sidebar { padding: 26px 14px 18px; }
+.calm-shell .brand { font-size: 23px; letter-spacing: -.7px; gap: 9px; }
+.calm-shell .brand-mark { width: 32px; height: 32px; border-radius: 10px; background: var(--accent); color: var(--bg); font-weight: 600; font-size: 20px; }
+.calm-shell .sidebar-caption { display: none; }
+.calm-shell .main-nav { margin-top: 40px; gap: 8px; }
+.calm-shell .main-nav a { min-height: 46px; padding: 12px; border-radius: 8px; font-size: 14px; }
+.calm-shell .main-nav a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
+.calm-shell .main-nav a[aria-current="page"]::before { display: none; }
+.calm-shell .nav-full-label, .calm-shell .nav-count, .calm-shell .sidebar-quick-actions { display: none; }
+.calm-shell .nav-short-label { display: inline; }
+.calm-shell .sidebar-bottom .local-status { display: none; }
+.calm-shell .profile-button { gap: 8px; }
+.calm-shell .profile-button strong { font-size: 12px; overflow-wrap: anywhere; }
+.calm-shell .profile-button small { font-size: 11px; }
+.calm-shell .topbar { min-height: 66px; padding-inline: 32px; border-bottom: 0; }
+.calm-shell .topbar .breadcrumb { color: var(--muted); font-size: 13px; }
+.calm-shell .topbar-status { display: none; }
+.calm-shell .main-content { max-width: 1160px; margin-inline: auto; padding: 20px 32px 28px; }
+.calm-shell .page-heading { gap: 18px; margin-bottom: 26px; align-items: center; }
+.calm-shell .page-heading h1 { font-size: clamp(25px,3vw,32px); font-weight: 600; letter-spacing: -.6px; overflow-wrap: anywhere; }
+.calm-shell .page-heading .greeting, .calm-shell.view-dashboard .page-heading .muted { display: none; }
+.calm-shell .page-heading .button { font-size: 13px; min-height: 40px; border-radius: 8px; }
+.calm-shell .page-heading .button-primary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.calm-shell .button { border-radius: 8px; }
+.calm-shell :is(.panel-heading h2,.heading-with-icon h2) { font-size: 16px; font-weight: 500; }
+.calm-shell .home-dashboard-grid { display: grid; grid-template-columns: minmax(0,1.65fr) minmax(220px,1fr); column-gap: 30px; row-gap: 22px; align-items: start; }
+.calm-shell .home-work, .calm-shell .home-updates, .calm-shell .home-mail { min-width: 0; }
+.calm-shell .home-updates { display: flex; flex-direction: column; gap: 22px; padding-inline-start: 26px; border-inline-start: 1px solid var(--border); }
+.calm-shell .home-mail { grid-column: 1; margin: 0; }
+.calm-shell .home-work > .calm-next { background: var(--calm-next-bg); color: var(--calm-next-text); border: 0; border-radius: 14px; padding: 18px 20px; margin-bottom: 26px; display: block; }
+.calm-shell .calm-next .day-focus-label { color: var(--calm-next-muted); font-size: 13px; }
+.calm-shell .calm-next .day-focus-label svg { display: none; }
+.calm-shell .calm-next .day-focus-event { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 0 22px; margin: 20px 0 0; color: inherit; }
+.calm-shell .calm-next .day-focus-time { display: flex; flex-direction: column; align-items: start; gap: 5px; border-inline-end: 1px solid color-mix(in srgb,var(--calm-next-muted) 35%,transparent); padding-inline-end: 22px; grid-column: 1; grid-row: 1; }
+.calm-shell .calm-next .day-focus-time time { font-size: 29px; font-weight: 500; line-height: 1.3; letter-spacing: -.6px; }
+.calm-shell .calm-next .day-focus-time > span { color: var(--calm-next-muted); font-size: 13px; }
+.calm-shell .calm-next-copy { display: flex; flex-direction: column; gap: 7px; min-width: 0; padding-top: 2px; }
+.calm-shell .calm-next-copy > strong { font-size: 18px; font-weight: 500; line-height: 1.45; overflow-wrap: anywhere; }
+.calm-shell .calm-next .day-focus-room { display: flex; gap: 5px; align-items: center; color: var(--calm-next-muted); font-size: 12px; border: 0; padding: 0; overflow-wrap: anywhere; }
+.calm-shell .calm-next-instructor { font-size: 12px; color: var(--calm-next-muted); }
+.calm-shell .calm-next-open { grid-column: 1/-1; display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid color-mix(in srgb,var(--calm-next-muted) 25%,transparent); padding-top: 12px; margin-top: 18px; font-size: 12px; color: var(--calm-next-muted); }
+.calm-shell .calm-next.day-focus-empty .day-focus-event { display: block; font-size: 15px; }
+.calm-shell .home-focus-tasks { margin: 0; padding: 0; border: 0; background: none; }
+.calm-shell .home-focus-tasks .panel-heading { display: flex; align-items: center; justify-content: space-between; padding: 0 0 12px; border: 0; gap: 8px; flex-wrap: wrap; }
+.calm-shell .home-focus-tasks .panel-heading .button { padding: 4px 0; font-size: 12px; color: var(--accent); }
+.calm-shell .home-focus-tasks .task-list { padding: 0; }
+.calm-shell .task-check { border-radius: 50%; border: 1px solid var(--dim); width: 22px; height: 22px; flex-shrink: 0; }
+.calm-shell .task-row { gap: 12px; padding-block: 14px; }
+.calm-shell .task-title-button { padding: 0; display: block; background: none; color: inherit; border: 0; text-align: start; cursor: pointer; font: inherit; overflow-wrap: anywhere; font-size: 15px; line-height: 1.55; font-weight: 400; }
+.calm-shell .task-title-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.calm-shell .task-row .record-meta { font-size: 12px; gap: 5px 12px; margin-top: 4px; line-height: 1.5; }
+.calm-shell .task-list-compact .task-due:not(.overdue) { color: var(--amber); }
+.calm-shell .calm-rail-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.calm-shell .calm-rail-heading a { color: var(--muted); min-width: 36px; min-height: 36px; display: grid; place-items: center; }
+.calm-shell .calm-later h2,.calm-shell .calm-week-note h2 { font-size: 14px; font-weight: 500; }
+.calm-shell .calm-later ol { list-style: none; margin: 15px 0 0; padding: 0; }
+.calm-shell .calm-later li { display: grid; grid-template-columns: 42px minmax(0,1fr); gap: 14px; padding-bottom: 22px; }
+.calm-shell .calm-later li:last-child { padding-bottom: 0; }
+.calm-shell .calm-later time { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.calm-shell .calm-later li a { font-size: 14px; color: var(--text); overflow-wrap: anywhere; }
+.calm-shell .calm-later li p { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.calm-shell .calm-week-note { border-top: 1px solid var(--border); padding-top: 18px; }
+.calm-shell .calm-week-note p { font-size: 13px; margin: 10px 0 0; line-height: 1.7; }
+.calm-shell .calm-week-note p+p { margin-top: 3px; }
+.calm-shell .calm-week-note>a { display: flex; align-items: center; justify-content: space-between; min-height: 40px; color: var(--accent); font-size: 12px; margin-top: 6px; }
+.calm-shell .home-task-details { margin-top: 10px; }
+.calm-shell :is(.home-task-details,.calm-mail-help,.calm-followups,.calm-source-updates,.calm-update-actions)>summary { cursor: pointer; font-size: 12px; color: var(--muted); min-height: 36px; display: flex; align-items: center; gap: 8px; }
+.calm-shell .home-task-details .field-help { font-size: 12px; }
+.calm-shell .home-work .compact-agenda { margin-top: 16px; }
+.calm-shell .home-work .compact-agenda > summary { min-height: 42px; font-size: 13px; }
+.calm-shell .home-updates .personal-updates { order: initial; width: auto; margin: 0; padding: 0 0 16px; border: 0; border-radius: 0; background: none; border-bottom: 1px solid var(--border); }
+.calm-shell .personal-updates-heading { gap: 6px; margin-bottom: 12px; }
+.calm-shell .home-updates .personal-updates-heading h2 { color: var(--text); font-size: 14px; font-weight: 500; }
+.calm-shell .home-updates .personal-update-card h3 { font-size: 16px; font-weight: 500; line-height: 1.6; margin: 4px 0 8px; }
+.calm-shell .home-updates .personal-update-headline { font-size: 12px; }
+.calm-shell .personal-update-actions { gap: 5px; align-items: center; }
+.calm-shell .personal-update-actions .button { min-height: 38px; font-size: 12px; padding-inline: 8px; }
+.calm-shell .calm-update-actions > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.calm-shell .calm-followups,.calm-shell .calm-source-updates { width: 100%; border-bottom: 1px solid var(--border); }
+.calm-shell .home-mail .daily-mail { border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 0; background: none; }
+.calm-shell .daily-mail > .panel-heading { padding: 14px 0 6px; margin: 0; }
+.calm-shell .daily-mail .panel-heading h2 { font-size: 14px; }
+.calm-shell .daily-mail .panel-heading .button { font-size: 12px; padding-inline: 0; }
+.calm-shell .calm-mail-help { margin-bottom: 4px; }
+.calm-shell .calm-mail-help>summary { font-size: 11px; min-height: 28px; }
+.calm-shell .daily-mail .calm-mail-message { padding: 0; border: 0; background: none; }
+.calm-shell .calm-mail-message > summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; min-height: 44px; cursor: pointer; list-style: none; }
+.calm-shell .calm-mail-message > summary > span:first-child { overflow-wrap: anywhere; min-width: 0; }
+.calm-shell .calm-mail-open { color: var(--accent); font-size: 12px; flex: none; }
+.calm-shell .calm-mail-message[open] > summary { margin-bottom: 12px; }
+.calm-shell .calm-mail-message > p { font-size: 13px; }
+.calm-shell .calm-mail-message .google-actions { gap: 6px; }
+.calm-shell .calm-mail-message .google-actions .button { font-size: 12px; }
+.calm-shell .dashboard-more { margin-top: 22px; border-top: 1px solid var(--border); }
+.calm-shell .dashboard-more > summary { min-height: 44px; font-size: 13px; }
+.calm-shell .workspace-footer { margin-top: 24px; font-size: 11px; }
+.calm-shell .academic-toolbar { margin-bottom: 12px; align-items: center; }
+.calm-shell .academic-toolbar > div:first-child { display: none; }
+.calm-shell .academic-toolbar .academic-manual-tools { margin-inline-start: auto; }
+.calm-shell .academic-manual-tools > summary { font-size: 12px; color: var(--muted); }
+.calm-shell .calm-academic-tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.calm-shell .calm-academic-tabs button { border: 0; background: none; border-bottom: 2px solid transparent; color: var(--muted); font: inherit; font-size: 14px; padding: 0 0 12px; cursor: pointer; min-height: 40px; }
+.calm-shell .calm-academic-tabs button[aria-pressed="true"] { border-bottom-color: var(--accent); color: var(--accent); }
+.calm-shell .academic-scope { border: 0; margin: 0 0 14px; }
+.calm-shell .academic-scope>summary { font-size: 12px; padding: 0; min-height: 32px; }
+.calm-shell [hidden] { display: none !important; }
+.calm-shell .academic-workspace > section { min-width: 0; }
+.calm-shell .academic-workspace .academic-deadlines,.calm-shell .academic-workspace .academic-exams { border: 0; background: none; border-radius: 0; }
+.calm-shell .calm-course-list-title { font-size: 16px; font-weight: 500; margin-bottom: 14px; }
+.calm-shell .course-grid { grid-template-columns: 1fr; gap: 0; }
+.calm-shell .course-card { padding: 16px 0; border-top: 0; min-width: 0; }
+.calm-shell .course-card h3 { font-size: 17px; font-weight: 500; }
+.calm-shell .course-card-top { margin-bottom: 7px; }
+.calm-shell .course-card-top > svg { width: 17px; height: 17px; }
+.calm-shell .course-card-stats { font-size: 12px; }
+.calm-shell .class-mobile-days { display: grid; grid-template-columns: repeat(7,minmax(0,1fr)); max-width: 560px; gap: 8px; margin: 18px 0 24px; }
+.calm-shell .class-mobile-days button { display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 3px; border-radius: 9px; border: 1px solid var(--border); background: transparent; min-width: 0; color: var(--muted); }
+.calm-shell .class-mobile-days button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.calm-shell .class-mobile-days button>span { font-size: 12px; }
+.calm-shell .class-mobile-days button>strong { font-size: 18px; font-weight: 500; }
+.calm-shell .calm-day-lessons { max-width: 700px; }
+.calm-shell .calm-lesson { display: grid; grid-template-columns: 52px minmax(0,1fr); gap: 18px; margin-bottom: 18px; }
+.calm-shell .calm-lesson-time { display: flex; flex-direction: column; gap: 7px; padding-top: 16px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.calm-shell .calm-lesson-body { display: flex; flex-direction: column; text-align: start; padding: 16px 20px; border: 0; border-radius: 12px; background: var(--calm-next-bg); color: var(--calm-next-text); cursor: pointer; min-width: 0; }
+.calm-shell .calm-lesson-body strong { font-size: 17px; font-weight: 500; overflow-wrap: anywhere; }
+.calm-shell .calm-lesson-body>span { font-size: 13px; color: var(--calm-next-muted); margin-top: 7px; overflow-wrap: anywhere; }
+.calm-shell .class-schedule .calendar-toolbar { display: flex; gap: 6px 10px; flex-wrap: wrap; }
+.calm-shell .class-day-heading.is-today { box-shadow: inset 0 -2px var(--accent); }
+.calm-shell .class-schedule .calendar-toolbar .button { font-size: 12px; padding-inline: 9px; }
+.calm-shell .class-schedule .calendar-toolbar strong { font-size: 14px; font-weight: 500; }
+.calm-shell .class-schedule .calendar-toolbar .segmented { margin-inline-start: auto; }
+.calm-shell .class-schedule .calendar-toolbar .segmented button { font-size: 12px; }
+@media(max-width:1000px){.calm-shell{grid-template-columns:146px minmax(0,1fr)}.calm-shell .main-content{padding-inline:24px}.calm-shell .home-dashboard-grid{grid-template-columns:minmax(0,1.7fr) minmax(190px,1fr);column-gap:24px}.calm-shell .home-updates{padding-inline-start:20px}}
+@media(max-width:760px){
+  .calm-shell{display:block}.calm-shell .sidebar{position:fixed;top:auto;bottom:0;inset-inline:0;height:auto;z-index:40;display:block;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));border:0;border-top:1px solid var(--border);background:var(--surface);overflow:visible;box-shadow:none}
+  .calm-shell .sidebar .main-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;gap:6px}.calm-shell .sidebar .main-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;gap:5px;padding:6px 2px;font-size:11px;border-radius:9px}.calm-shell .sidebar .sidebar-bottom,.calm-shell .sidebar>.brand{display:none}
+  .calm-shell .main-content{padding:16px 18px calc(116px + env(safe-area-inset-bottom,0px));max-width:100%;margin:0}.calm-shell .topbar{padding:calc(6px + env(safe-area-inset-top,0px)) 16px 6px;min-height:58px;gap:6px}.calm-shell .breadcrumb{font-size:12px;min-width:0}.calm-shell .topbar-actions{gap:3px}.calm-shell .mobile-assistant-button,.calm-shell .mobile-settings-button{border:0;border-radius:8px;background:none;min-width:40px;width:40px;height:44px}
+  .calm-shell .page-heading{margin-bottom:20px;gap:10px;align-items:center}.calm-shell .page-heading h1{font-size:27px;letter-spacing:-.5px}.calm-shell .page-heading .button{font-size:12px;padding-inline:10px;min-height:40px}.calm-shell .page-heading .button svg{width:15px;height:15px}
+  .calm-shell .home-dashboard-grid{display:flex;flex-direction:column;gap:18px}.calm-shell .home-work{width:100%;order:0}.calm-shell .home-mail{width:100%;order:1}.calm-shell .home-updates{display:flex;width:100%;order:2;padding:0;border:0;gap:12px}.calm-shell .home-updates .personal-updates{width:100%;padding:0 0 14px;order:initial}.calm-shell .home-updates .tracked-requests{order:initial}.calm-shell .calm-followups,.calm-shell .home-planning-fold,.calm-shell .calm-source-updates{order:initial}
+  .calm-shell .calm-later{display:none}.calm-shell .calm-week-note{padding-top:12px}.calm-shell .calm-week-note p{font-size:12px;margin-top:6px}.calm-shell .calm-week-note p+p{margin-top:2px}
+  .calm-shell .home-work>.calm-next{padding:16px;margin-bottom:22px}.calm-shell .calm-next .day-focus-event{display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 16px;margin-top:16px}.calm-shell .calm-next .day-focus-time{grid-column:1;grid-row:1;padding-inline-end:16px;align-items:start;flex-direction:column}.calm-shell .calm-next .day-focus-time time{font-size:28px}.calm-shell .calm-next-copy>strong{font-size:17px}.calm-shell .calm-next-open{padding-top:10px;margin-top:16px}
+  .calm-shell .home-focus-tasks .task-list{padding:0}.calm-shell .home-focus-tasks .task-row{padding-block:12px}.calm-shell .task-title-button{font-size:15px}.calm-shell .task-row .record-meta{font-size:12px}.calm-shell .home-focus-tasks .panel-heading h2{font-size:16px}.calm-shell .home-focus-tasks .panel-heading .button{font-size:12px;min-height:36px}.calm-shell .home-task-details>summary{min-height:32px;font-size:11px}
+  .calm-shell .academic-toolbar{margin-bottom:8px}.calm-shell .academic-toolbar>.academic-manual-tools{flex-basis:auto}.calm-shell .calm-academic-tabs{gap:0;justify-content:space-between}.calm-shell .calm-academic-tabs button{font-size:13px;padding-inline:3px;min-height:44px}.calm-shell .class-schedule .calendar-toolbar .segmented{margin-inline-start:0}.calm-shell .class-mobile-days{gap:5px;max-width:none;grid-template-columns:repeat(7,minmax(44px,1fr));overflow-x:auto}.calm-shell .class-mobile-days button{min-height:58px}.calm-shell .class-mobile-days button>span{font-size:11px}.calm-shell .class-mobile-days button>strong{font-size:17px}
+  .calm-shell .calm-lesson{grid-template-columns:44px minmax(0,1fr);gap:12px}.calm-shell .calm-lesson-body{padding:14px}.calm-shell .calm-lesson-body strong{font-size:16px}.calm-shell .calm-lesson-body>span{font-size:12px}.calm-shell .calm-lesson-time{font-size:12px}
+  .calm-shell .calm-week-timetable .class-schedule-grid{min-width:960px;grid-template-columns:54px repeat(7,minmax(0,1fr))}.calm-shell .calm-week-timetable .class-day-heading,.calm-shell .calm-week-timetable .class-day-column{display:block}.calm-shell .calm-week-timetable .class-schedule-scroll{overflow-x:auto}.calm-shell .class-schedule-scroll .class-day-heading{min-width:0}
+  .calm-shell .personal-update-actions .button,.calm-shell .calm-update-actions>summary{min-height:44px}.calm-shell .task-check::before{content:"";position:absolute;inset:-11px}.calm-shell .task-check{position:relative}.calm-shell .task-row{gap:16px}.calm-shell .personal-update-card h3{font-size:16px}
+}
+@media(max-width:360px){.calm-shell .topbar .breadcrumb{font-size:11px}.calm-shell .page-heading h1{font-size:24px}.calm-shell .page-heading{flex-wrap:wrap}.calm-shell .calm-next-copy>strong{font-size:16px}.calm-shell .calm-next .day-focus-time time{font-size:25px}.calm-shell .class-schedule .calendar-toolbar{gap:5px}.calm-shell .class-schedule .calendar-toolbar>.button{padding-inline:6px}.calm-shell .class-mobile-days{gap:3px}}
+@media(forced-colors:active){.calm-shell .calm-next,.calm-shell .calm-lesson-body{border:1px solid CanvasText}.calm-shell .main-nav a[aria-current="page"],.calm-shell .calm-academic-tabs button[aria-pressed="true"],.calm-shell .class-mobile-days button[aria-pressed="true"]{outline:2px solid Highlight}.calm-shell .task-check{border-color:ButtonText}}

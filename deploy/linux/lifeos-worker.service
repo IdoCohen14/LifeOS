@@ -1,0 +1,16 @@
+[Unit]
+Description=LifeOS owned-account background jobs
+Requires=lifeos-init.service
+After=lifeos-init.service lifeos-api.service
+PartOf=lifeos.target
+
+[Service]
+User=lifeos
+Group=lifeos
+WorkingDirectory=/opt/lifeos
+EnvironmentFile=/etc/lifeos/runtime.env
+ExecStart=/opt/lifeos/.venv/bin/python /opt/lifeos/services/worker/worker.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=yes

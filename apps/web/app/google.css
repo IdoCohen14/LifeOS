@@ -1,0 +1,198 @@
+.google-settings {
+  padding: 4px 24px 20px;
+}
+.google-heading {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.google-heading > svg {
+  color: var(--accent);
+}
+.google-heading > div {
+  flex: 1;
+  min-width: 0;
+}
+.google-heading h3 {
+  font-size: 17px;
+}
+.google-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.google-connected {
+  color: var(--green);
+  border-color: var(--green);
+}
+.google-guide {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 15px 18px;
+  margin: 16px 0;
+}
+.google-guide summary {
+  cursor: pointer;
+  min-height: 28px;
+  color: var(--accent);
+  font-size: 14px;
+}
+.google-guide ol {
+  padding-inline-start: 21px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+.google-guide li {
+  margin: 8px 0;
+}
+.google-config-form {
+  display: flex;
+  gap: 14px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+.google-config-form label {
+  flex: 1;
+  min-width: 180px;
+}
+.google-config-form input {
+  font-size: 12px;
+}
+.google-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+.google-calendars {
+  margin: 20px 0;
+  padding: 15px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-width: 0;
+}
+.google-calendars legend {
+  font-size: 13px;
+  padding: 0 7px;
+  color: var(--muted);
+}
+.google-calendars .checkbox-label {
+  flex-wrap: wrap;
+  min-height: 46px;
+}
+.google-calendars small {
+  color: var(--dim);
+  font-size: 10px;
+  margin-inline-start: auto;
+}
+.google-settings > .field-help {
+  margin: 13px 0;
+}
+.google-settings .field-help svg {
+  display: inline;
+  vertical-align: middle;
+  margin-inline-end: 6px;
+}
+.google-settings > .error-message {
+  margin-block: 15px;
+}
+.google-settings > .status-message {
+  margin-top: 12px;
+}
+@media (max-width: 639px) {
+  .google-settings {
+    padding-inline: 16px;
+  }
+  .google-heading {
+    flex-wrap: wrap;
+  }
+  .google-heading > .subtle-badge {
+    margin-inline-start: 38px;
+  }
+  .google-heading p {
+    font-size: 11px;
+  }
+  .google-guide {
+    padding: 14px;
+  }
+  .google-guide ol {
+    font-size: 12px;
+  }
+  .google-actions > .button {
+    font-size: 12px;
+  }
+  .google-config-form > .button {
+    width: 100%;
+  }
+  .google-config-form label {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+  .google-calendars {
+    padding: 12px;
+  }
+  .google-calendars small {
+    flex-basis: 100%;
+    margin-inline-start: 28px;
+  }
+}
+
+.gmail-settings { border-block-start: 1px solid var(--border); margin-block-start: 24px; padding-block-start: 24px; }
+.gmail-messages { display: grid; gap: 12px; }
+.gmail-message { padding: 16px; border: 1px solid var(--border); border-radius: 12px; min-width: 0; overflow-wrap: anywhere; }
+.gmail-message p { margin-block: 8px; }
+.gmail-message-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.gmail-message-heading span, .gmail-message time { font-size: .8rem; opacity: .8; }
+
+.recommendations-panel { margin-block: 20px; }
+.recommendation-list { display: grid; gap: 12px; }
+.recommendation-item { display: flex; align-items: start; gap: 12px; padding: 16px; border: 1px solid var(--border); border-radius: 14px; }
+.recommendation-icon { display: inline-grid; place-items: center; width: 34px; height: 34px; flex-shrink: 0; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); border-radius: 10px; }
+.recommendation-copy { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.recommendation-copy h3 { margin: 5px 0; font-size: 1rem; }
+.recommendation-copy p, .recommendation-copy small { font-size: .85rem; color: var(--muted); }
+.recommendation-clear { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+
+.recovery-settings { grid-column: 1 / -1; }
+.recovery-form { display: flex; gap: 14px; flex-wrap: wrap; align-items: end; margin-block: 18px; }
+.recovery-form label { flex: 1; min-width: 180px; }
+.recovery-form input { width: 100%; margin-top: 8px; }
+.account-deletion bdi { overflow-wrap: anywhere; }
+.recovery-list { list-style: none; padding: 0; display: grid; gap: 10px; }
+.recovery-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; }
+.recovery-list li span { display: grid; gap: 5px; }
+.recovery-list small { color: var(--muted); }
+.recovery-export { border-block-start: 1px solid var(--border); padding-top: 16px; margin-top: 20px; }
+@media (max-width: 700px) { .recovery-form label { min-width: 100%; } .recovery-form > .button { width: 100%; } }
+
+.button.mail-undo {
+  gap: 9px;
+  padding: 6px 14px 6px 8px;
+  padding-inline: 8px 14px;
+  margin-block: 2px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--accent);
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.button.mail-undo:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.mail-undo-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  flex-shrink: 0;
+}
+[dir="rtl"] .mail-undo-icon svg { transform: scaleX(-1); }
+@media (prefers-reduced-motion: reduce) {
+  .button.mail-undo { transition: none; }
+}

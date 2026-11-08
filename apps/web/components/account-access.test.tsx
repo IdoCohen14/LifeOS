@@ -1,0 +1,33 @@
+import {fireEvent,render,screen,waitFor,cleanup} from '@testing-library/react';
+import {afterEach,expect,it,vi} from 'vitest';
+import {AccountAccessSettings,AccountAccessRecovery} from './account-access';
+import {api} from '@/lib/api';
+vi.mock('@/lib/api',()=>({api:vi.fn()}));
+afterEach(()=>{cleanup();vi.clearAllMocks();});
+const t=(_he:string,en:string)=>en;
+it('requires proof, shows a new key once and dismisses it',async()=>{
+  vi.mocked(api).mockResolvedValueOnce({recovery_configured:false}).mockResolvedValueOnce({recovery_key:'LFR1-fixture-key'});
+  render(<AccountAccessSettings csrf="fixture-csrf" t={t} onUnauthorized={()=>{}}/>);
+  await screen.findByText('Create recovery key');
+  fireEvent.change(screen.getByLabelText('Current password'),{target:{value:'fixture password'}});
+  fireEvent.click(screen.getByText('Create recovery key'));
+  expect(await screen.findByDisplayValue('LFR1-fixture-key')).toBeInTheDocument();
+  expect(api).toHaveBeenLastCalledWith('accounts/access/key','POST',{password:'fixture password'},'fixture-csrf');
+  fireEvent.click(screen.getByText('I saved the key'));
+  expect(screen.queryByDisplayValue('LFR1-fixture-key')).not.toBeInTheDocument();
+});
+it('rejects mismatched passwords and submits recovery without a session',async()=>{
+  vi.mocked(api).mockResolvedValue(undefined);
+  render(<AccountAccessRecovery t={t} onBack={()=>{}}/>);
+  fireEvent.change(screen.getByLabelText('Username'),{target:{value:'fixture'}});
+  fireEvent.change(screen.getByLabelText('Recovery key'),{target:{value:'LFR1-fixture'}});
+  fireEvent.change(screen.getByLabelText('New password'),{target:{value:'new password'}});
+  fireEvent.change(screen.getByLabelText('Confirm new password'),{target:{value:'different password'}});
+  fireEvent.click(screen.getByText('Reset password'));
+  expect(await screen.findByRole('alert')).toHaveTextContent('Passwords do not match.');
+  expect(api).not.toHaveBeenCalled();
+  fireEvent.change(screen.getByLabelText('Confirm new password'),{target:{value:'new password'}});
+  fireEvent.click(screen.getByText('Reset password'));
+  await waitFor(()=>expect(api).toHaveBeenCalledWith('accounts/access/recover','POST',{login:'fixture',recovery_key:'LFR1-fixture',new_password:'new password'}));
+  expect(await screen.findByText('Password changed. Sign in, then create a new recovery key in settings.')).toBeInTheDocument();
+});

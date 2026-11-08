@@ -1,0 +1,134 @@
+/* Anti-slop direction: a working day planner, not a collection of widgets.
+   Keep palette/data authority; this file defines the revised visual composition. */
+@font-face { font-family: "LifeOS Plex"; src: url("/fonts/ibm-plex-hebrew/IBMPlexSansHebrew-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "LifeOS Plex"; src: url("/fonts/ibm-plex-hebrew/IBMPlexSansHebrew-SemiBold.ttf") format("truetype"); font-style: normal; font-weight: 500 800; font-display: swap; }
+:root { --radius: 5px; }
+body { font-family: "LifeOS Plex", "Segoe UI", Arial, sans-serif; font-size: 16px; line-height: 1.6; }
+.page-heading h1, .view-dashboard .page-heading h1 { font-size: 40px; font-weight: 600; letter-spacing: -1.2px; }
+.page-heading .muted:empty { display: none; }
+.page-heading .greeting { font-size: 13px; }
+.page-heading .greeting svg { display: none; }
+.page-heading { margin-bottom: 28px; }
+.main-content { max-width: 1400px; padding-top: 30px; }
+.sidebar { padding-top: 30px; }
+.sidebar-caption { margin-block: 13px 28px; }
+.main-nav a { border-radius: 4px; font-size: 14px; }
+.main-nav a[aria-current="page"] { background: none; color: var(--text); }
+.main-nav a[aria-current="page"]::before { top: 12px; bottom: 12px; width: 2px; }
+.main-nav a[aria-current="page"] svg { color: var(--accent); }
+.nav-count, .count-badge, .subtle-badge { border-radius: 3px; }
+.button { border-radius: 5px; }
+.panel, .section-fold, .modal-content { border-radius: 5px; }
+.heading-with-icon > svg, .personal-updates-icon { display: none; }
+.workspace-footer { font-size: 11px; border-top: 1px solid var(--border); }
+.app-shell .assistant-launcher { display: none; }
+.sidebar-quick-actions { margin-top: 30px; }
+
+/* Dates are navigation; totals are useful links rather than hero statistics. */
+.view-dashboard .day-board { background: none; border: 0; border-radius: 0; padding: 0 0 13px; border-bottom: 1px solid var(--border); gap: 24px; }
+.view-dashboard .day-board-heading { border: 0; padding-inline-end: 0; }
+.view-dashboard .day-board-heading h2 { font-size: 17px; }
+.view-dashboard .day-ribbon a { border-radius: 0; min-height: 52px; border-bottom: 2px solid transparent; }
+.view-dashboard .day-ribbon a.is-today { background: none; border-bottom-color: var(--accent); color: var(--text); }
+.view-dashboard .day-ribbon strong { font-size: 19px; font-weight: 400; }
+.view-dashboard .day-ribbon span { font-size: 12px; }
+.view-dashboard .day-metrics { background: none; border: 0; border-radius: 0; gap: 24px; justify-content: flex-start; }
+.view-dashboard .day-metric { display: flex; flex: none; align-items: baseline; padding: 0; gap: 7px; }
+.view-dashboard .day-metric + .day-metric { border: 0; }
+.view-dashboard .day-metric strong { font-size: 15px; font-weight: 600; color: var(--text); }
+.view-dashboard .day-metric span { font-size: 12px; }
+.view-dashboard .day-dashboard { row-gap: 10px; margin-bottom: 34px; }
+
+/* One work surface, with contextual notes kept in a distinct time rail. */
+.home-dashboard-grid { grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr); column-gap: 38px; row-gap: 26px; }
+.home-work > .panel, .home-work .dashboard-columns > .panel { background: none; border: 0; border-radius: 0; }
+.home-focus-tasks .panel-heading { padding: 0 0 17px; border-bottom: 1px solid var(--border); }
+.home-focus-tasks .panel-heading h2 { font-size: 22px; font-weight: 400; }
+.home-focus-tasks .count-badge { background: none; color: var(--muted); border: 0; }
+.home-focus-tasks .task-list { padding-inline: 0; }
+.home-focus-tasks .task-row { padding-block: 19px; }
+.home-focus-tasks .record-title { font-size: 18px; font-weight: 400; }
+.home-focus-tasks .record-meta { font-size: 12px; margin-top: 6px; }
+.task-check { border-radius: 4px; }
+.home-focus-tasks .panel-footer { padding: 8px 0; }
+.home-focus-tasks .panel-footer .field-help { font-size: 11px; }
+.home-updates { padding-inline-start: 26px; border-inline-start: 1px solid var(--border); gap: 25px; }
+.home-updates .day-focus { background: none; border: 0; border-radius: 0; padding: 0 0 22px; border-bottom: 1px solid var(--border); color: var(--text); }
+.view-dashboard .day-focus-label { font-size: 12px; color: var(--muted); }
+.view-dashboard .day-focus-label svg { display: none; }
+.view-dashboard .day-focus-event { margin-block: 13px 0; gap: 5px; }
+.view-dashboard .day-focus-event > strong { font-size: 18px; font-weight: 400; }
+.view-dashboard .day-focus-event > .day-focus-time { color: var(--text); align-items: baseline; gap: 9px; }
+.day-focus-time time { font-size: 37px; font-weight: 400; line-height: 1.4; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+.day-focus-time > span { font-size: 15px; color: var(--muted); }
+.view-dashboard .day-focus-event > .day-focus-room { color: var(--muted); font-size: 13px; padding-top: 8px; border: 0; }
+.home-updates .day-progress { display: none; }
+.home-updates .personal-updates { background: none; border: 0; border-radius: 0; padding: 0 0 20px; border-bottom: 1px solid var(--border); }
+.home-updates .personal-updates-heading { margin-bottom: 13px; align-items: baseline; }
+.home-updates .personal-updates-heading h2 { font-size: 13px; font-weight: 400; color: var(--muted); }
+.home-updates .personal-updates-heading .button { padding: 0; font-size: 11px; }
+.home-updates .personal-update-headline { font-size: 12px; color: var(--amber); font-weight: 400; }
+.home-updates .personal-update-card h3 { font-size: 18px; font-weight: 400; }
+.home-updates .personal-update-date { font-size: 13px; color: var(--muted); }
+.home-updates .personal-update-actions .button { font-size: 12px; border-radius: 3px; }
+.home-work .compact-agenda { border-block: 1px solid var(--border); margin-top: 15px; }
+.home-work .compact-agenda > summary { padding-inline: 0; font-size: 14px; }
+.home-updates .tracked-requests, .home-planning-fold { border: 0; border-radius: 0; background: none; padding: 0; border-bottom: 1px solid var(--border); }
+.home-planning-fold > summary { padding-inline: 0; }
+.home-mail .daily-mail { background: none; border: 0; border-radius: 0; padding: 0; border-top: 1px solid var(--border); }
+.home-mail .daily-mail .panel-heading { padding: 20px 0 14px; }
+.home-mail .gmail-message { background: none; border: 0; padding-inline: 0; }
+.home-mail .gmail-message > h3 { font-weight: 400; font-size: 18px; }
+.dashboard-more { border-block-end: 0; }
+
+/* Lists, settings and calendar retain their functional structure, not card chrome. */
+.view-tasks .tasks-panel, .view-academic .academic-deadlines { border: 0; background: none; }
+.academic-workspace .academic-deadlines .panel-heading { padding-inline: 0; }
+.academic-workspace .academic-deadlines .academic-list { padding-inline: 0; }
+.deadline-list .academic-record-content > strong { font-size: 17px; font-weight: 400; }
+.academic-workspace .course-card { background: none; border-inline: 0; border-bottom: 1px solid var(--border); border-radius: 0; padding-inline: 0; }
+.course-card h3 { font-weight: 400; }
+.academic-workspace .section-fold, .settings-layout > .section-fold { background: none; border-inline: 0; border-top: 0; border-radius: 0; }
+.settings-layout > .panel:first-child { background: none; border: 0; padding: 0; }
+.settings-layout > .panel:first-child .panel-heading { padding-inline: 0; }
+.settings-form { padding-inline: 0; }
+.settings-form input, .settings-form select { border-radius: 4px; font-weight: 400; }
+.settings-layout .section-fold > summary { padding-inline: 0; }
+.month-grid { border-radius: 3px; }
+.academic-exams .past-exams > summary { min-height: 44px; display: flex; align-items: center; font-size: 13px; color: var(--muted); cursor: pointer; }
+.academic-exams .exam-list > li { border-inline-start: 2px solid var(--accent); padding-inline-start: 14px; margin-block: 10px; }
+.academic-exams .deadline-course { display: flex; align-items: center; }
+
+@media(max-width:760px) {
+  .main-content { padding-top: 21px; }
+  .page-heading h1, .view-dashboard .page-heading h1 { font-size: 34px; }
+  .page-heading { margin-bottom: 23px; }
+  .sidebar .main-nav a { background: none; border-radius: 0; }
+  .sidebar .main-nav a[aria-current="page"] { background: none; color: var(--accent); }
+  .view-dashboard .day-board { padding-bottom: 7px; }
+  .view-dashboard .day-ribbon a { border-radius: 0; background: none; min-height: 47px; }
+  .view-dashboard .day-ribbon a.is-today { background: none; }
+  .view-dashboard .day-metrics { gap: 12px; justify-content: space-between; }
+  .view-dashboard .day-metric { gap: 5px; padding: 0; }
+  .view-dashboard .day-metric strong { font-size: 14px; }
+  .view-dashboard .day-metric span { font-size: 10px; }
+  .view-dashboard .day-dashboard { gap: 8px; margin-bottom: 22px; }
+  .view-dashboard .day-dashboard:not(:has(.day-focus)) .day-metrics { grid-row: 2; }
+  .home-dashboard-grid { gap: 21px; }
+  .home-updates .day-focus { display: block; padding-bottom: 15px; }
+  .home-updates .day-focus-event { display: grid; grid-template-columns: 1fr auto; gap: 5px 14px; margin-top: 6px; }
+  .home-updates .day-focus-event > strong { grid-column: 1; grid-row: 1; font-size: 18px; }
+  .home-updates .day-focus-time { grid-column: 2; grid-row: 1/3; display: flex; flex-direction: column; gap: 0; align-items: flex-end; }
+  .day-focus-time time { font-size: 32px; line-height: 1.2; }
+  .day-focus-time > span { font-size: 12px; }
+  .day-focus-time > svg { display: none; }
+  .home-updates .day-focus-room { grid-column: 1; grid-row: 2; }
+  .home-focus-tasks .panel-heading h2 { font-size: 21px; }
+  .home-focus-tasks .task-row { padding-block: 16px; }
+  .home-focus-tasks .record-title { font-size: 17px; }
+  .home-updates .personal-updates { padding: 0 0 17px; }
+  .home-mail .daily-mail .panel-heading { padding-inline: 0; }
+  .home-updates .tracked-requests { padding: 0; }
+  .settings-layout > .panel:first-child .panel-heading { padding-inline: 0; }
+  .settings-form { padding-inline: 0; }
+}
