@@ -90,7 +90,25 @@ Do not expose the development server directly to the internet. Linux templates a
 
 ## Screenshots
 
-Personal calendar, email and academic screenshots are intentionally excluded. Any future screenshots should be generated from explicitly synthetic fixtures.
+The current Hebrew RTL interface on desktop and mobile. All names, courses,
+rooms, tasks and dates below are synthetic demo data from an isolated test-mode
+workspace. Institutional events are simulated; no personal account, email,
+calendar or live provider data is shown.
+
+### Today dashboard
+
+![LifeOS desktop dashboard with the next class and priority tasks](docs/public/images/dashboard-desktop.png)
+
+### Academic workspace
+
+![LifeOS academic timetable with class times, rooms and lecturers](docs/public/images/academic-desktop.png)
+
+### Mobile layouts
+
+<p>
+  <img src="docs/public/images/dashboard-mobile.png" alt="LifeOS Today dashboard on a mobile viewport" width="300" />
+  <img src="docs/public/images/academic-mobile.png" alt="LifeOS academic timetable on a mobile viewport" width="300" />
+</p>
 
 ## Development status and next steps
 

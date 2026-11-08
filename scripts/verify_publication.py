@@ -60,7 +60,15 @@ def inspect_index(private_terms=()):
         try:
             text = content.decode('utf-8-sig')
         except UnicodeDecodeError:
-            if not (name.startswith('apps/web/public/') and Path(name).suffix in {'.png','.ttf'}):
+            reviewed_demo_images = {
+                'docs/public/images/dashboard-desktop.png',
+                'docs/public/images/academic-desktop.png',
+                'docs/public/images/dashboard-mobile.png',
+                'docs/public/images/academic-mobile.png',
+            }
+            allowed_asset = name.startswith('apps/web/public/') and Path(name).suffix in {'.png','.ttf'}
+            reviewed_demo = name in reviewed_demo_images and content.startswith(b'\x89PNG\r\n\x1a\n')
+            if not (allowed_asset or reviewed_demo):
                 findings.append({'file': name, 'category': 'unreviewed-binary'})
             continue
         for number, line in enumerate(text.splitlines(), 1):
